@@ -428,7 +428,6 @@ Contributions are welcome! Here's how you can help:
 ## 📞 Support
 
 - 🐛 **Report bugs**: [GitHub Issues](https://github.com/Nixon-H/kali-chroot-manager/issues)
-- 💬 **Questions**: [GitHub Discussions](https://github.com/Nixon-H/kali-chroot-manager/discussions)
 
 ## ⚖️ Disclaimer
 
