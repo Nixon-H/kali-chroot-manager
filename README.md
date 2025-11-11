@@ -135,7 +135,7 @@ The script will automatically install these packages on your host system:
 
 1. **Download the script:**
    ```bash
-   wget https://raw.githubusercontent.com/your-username/kali-chroot-manager/main/kali-chroot-manager.sh
+   wget https://raw.githubusercontent.com/Nixon-H/kali-chroot-manager/main/kali-chroot-manager.sh
    # Or clone the repository
    git clone https://github.com/your-username/kali-chroot-manager.git
    cd kali-chroot-manager
