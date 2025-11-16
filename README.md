@@ -9,6 +9,8 @@
 
 This script automates the creation and management of a Kali Linux chroot environment using `debootstrap`, enabling you to access Kali's extensive penetration testing toolkit directly from your Debian system—no dual-boot, virtual machine, or containers required.
 
+---
+
 ## 🎯 Why This Tool Exists
 
 ### The Problem: Kali's Instability on Production Systems
@@ -83,6 +85,8 @@ Unlike dual-booting, VMs, or Docker containers, a chroot provides:
 - **Easy Cleanup**: Remove everything with a single command
 - **Network Transparency**: Uses host's network configuration automatically
 
+---
+
 ## ⚠️ Security Notice
 
 **This script requires elevated privileges and performs critical system operations:**
@@ -94,15 +98,19 @@ Unlike dual-booting, VMs, or Docker containers, a chroot provides:
 
 **Use at your own risk.** Review the script before execution. Recommended for experienced users familiar with chroot environments.
 
+---
+
 ## ✨ Features
 
 ### Core Functionality
+
 - 🎨 **Intuitive Menu Interface** - Color-coded, easy-to-navigate options
 - 🔧 **Automated Setup** - Handles all configuration automatically
 - 🔒 **Safe Operations** - Built-in safeguards and cleanup mechanisms
 - 🗑️ **Clean Removal** - Complete uninstallation with no leftover traces
 
 ### Technical Highlights
+
 - **Smart Filesystem Binding**: Automatically mounts `/dev`, `/proc`, `/sys`, and `/dev/pts`
 - **Network Configuration**: Copies host DNS settings for immediate network access
 - **Locale Setup**: Pre-configures `en_US.UTF-8` locale for compatibility
@@ -110,9 +118,12 @@ Unlike dual-booting, VMs, or Docker containers, a chroot provides:
 - **Trap Handling**: Ensures all mounts are cleaned up even on errors or interrupts
 - **Idempotent Mounts**: Prevents duplicate mounts when re-entering the chroot
 
+---
+
 ## 📋 Prerequisites
 
 ### System Requirements
+
 | Requirement | Details |
 |------------|---------|
 | **Host OS** | Debian 13 (Trixie) |
@@ -124,34 +135,42 @@ Unlike dual-booting, VMs, or Docker containers, a chroot provides:
 ### Automatic Dependencies
 
 The script will automatically install these packages on your host system:
+
 - `debootstrap` - Creates the minimal Debian/Kali system
 - `curl` - Downloads Kali signing keys
 - `gnupg` - Manages cryptographic keys
-- `locales` - Handles locale generation
+- `iputils-ping` - For network connectivity checks
+
+---
 
 ## 🚀 Quick Start
 
 ### Installation
 
 1. **Download the script:**
-   ```bash
-   wget https://raw.githubusercontent.com/Nixon-H/kali-chroot-manager/main/kali-chroot-manager.sh
-   # Or clone the repository
-   git clone https://github.com/Nixon-H/kali-chroot-manager.git
-   cd kali-chroot-manager
-   ```
+
+```bash
+wget https://raw.githubusercontent.com/Nixon-H/kali-chroot-manager/main/kali-chroot-manager.sh
+# Or clone the repository
+git clone https://github.com/Nixon-H/kali-chroot-manager.git
+cd kali-chroot-manager
+```
 
 2. **Make it executable:**
-   ```bash
-   chmod +x kali-chroot-manager.sh
-   ```
+
+```bash
+chmod +x kali-chroot-manager.sh
+```
 
 3. **Run the script:**
-   ```bash
-   ./kali-chroot-manager.sh
-   ```
 
-   > ⚠️ **Important**: Run as your normal user, **NOT** with `sudo`. The script will prompt for your password when needed.
+```bash
+./kali-chroot-manager.sh
+```
+
+> ⚠️ **Important**: Run as your normal user, **NOT** with `sudo`. The script will prompt for your password when needed.
+
+---
 
 ## 📚 Usage Guide
 
@@ -159,21 +178,23 @@ The script will automatically install these packages on your host system:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       Kali Chroot Manager — Debian 13
+        Kali Chroot Manager — Debian 13
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1.  Install Kali chroot environment
-2.  Enter existing Kali chroot
-3.  Uninstall (remove all chroot data)
-4.  Exit
+1. Install Kali chroot environment
+2. Enter existing Kali chroot
+3. Setup 'kali-login' alias
+4. Uninstall (remove all chroot data)
+5. Exit
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Select an option [1-4]:
+Select an option [1-5]:
 ```
 
 ### Option 1: Install Kali Chroot Environment
 
 **What it does:**
+
 1. ✅ Verifies internet connectivity
 2. 🧹 Removes any conflicting Kali repository configurations from host
 3. 📦 Installs required dependencies on Debian host
@@ -186,6 +207,7 @@ Select an option [1-4]:
 10. 🎉 Offers to enter the chroot immediately
 
 **First-time setup example:**
+
 ```bash
 $ ./kali-chroot-manager.sh
 # Select option 1
@@ -196,12 +218,14 @@ $ ./kali-chroot-manager.sh
 ### Option 2: Enter Existing Kali Chroot
 
 **What it does:**
+
 1. ✓ Validates chroot directory exists
 2. 🔗 Mounts required filesystems (if not already mounted)
 3. 🌐 Updates DNS configuration
 4. 🚪 Drops you into a Kali bash login shell
 
 **Inside the chroot:**
+
 ```bash
 # You're now in Kali Linux!
 root@hostname:/# apt update
@@ -210,25 +234,48 @@ root@hostname:/# nmap -version
 root@hostname:/# exit  # Returns to menu
 ```
 
-### Option 3: Uninstall
+### Option 3: Setup 'kali-login' Alias
 
 **What it does:**
+
+1. 🔍 Detects your shell configuration file (`.zshrc`, `.bashrc`, or `.profile`)
+2. ✍️ Appends the `alias kali-login='sudo chroot /opt/kali-chroot /bin/bash --login'` command to it
+3. 💡 Allows you to type `kali-login` from your host terminal to enter the chroot, instead of using this script or the long command
+
+**After running this option:**
+
+```bash
+# Select option 3
+[*] Adding alias to /home/user/.zshrc...
+Alias 'kali-login' added.
+Please run 'source /home/user/.zshrc' or restart your terminal to use it.
+```
+
+> **Note:** You must reload your shell config (`source ~/.zshrc`) or open a new terminal for the alias to become active.
+
+### Option 4: Uninstall
+
+**What it does:**
+
 1. ⚠️ Requests confirmation (prevents accidental deletion)
 2. 🔓 Unmounts all bound filesystems
 3. 🗑️ Permanently removes `/opt/kali-chroot`
 4. 🧹 Cleans up any host Kali configurations
 
 **Complete removal:**
+
 ```bash
-# Select option 3
+# Select option 4
 WARNING: This will permanently remove /opt/kali-chroot and all data inside.
 Are you sure you want to remove the Kali chroot completely? [y/N]: y
 # Chroot and all data will be deleted
 ```
 
-### Option 4: Exit
+### Option 5: Exit
 
-Safely exits the script. The cleanup trap ensures all mounts are properly unmounted.
+Safely exits the script. The cleanup trap ensures all mounts are properly unmounted if any operations were in progress.
+
+---
 
 ## 🛠️ Technical Details
 
@@ -253,12 +300,15 @@ Safely exits the script. The cleanup trap ensures all mounts are properly unmoun
 ### How It Works
 
 #### Chroot Isolation
+
 The script creates a completely isolated Kali Linux environment at `/opt/kali-chroot`. This directory acts as the root (`/`) for all operations within the chroot, preventing any interference with your host Debian system.
 
 #### Debootstrap Magic
+
 `debootstrap` is Debian's official tool for creating minimal system installations. By pointing it to Kali's repositories, we create a lightweight Kali environment without the overhead of a full installation.
 
 #### Filesystem Binding
+
 ```bash
 mount --bind /dev /opt/kali-chroot/dev
 mount --bind /proc /opt/kali-chroot/proc
@@ -266,6 +316,7 @@ mount --bind /sys /opt/kali-chroot/sys
 ```
 
 These bind mounts allow the chroot to access:
+
 - **`/dev`**: Hardware devices (disks, network interfaces)
 - **`/proc`**: Process and system information
 - **`/sys`**: Kernel and device data
@@ -274,11 +325,14 @@ These bind mounts allow the chroot to access:
 Without these mounts, most programs would fail to function properly.
 
 #### Exit Trap Safety
+
 ```bash
-trap cleanup_mounts EXIT
+trap master_cleanup EXIT INT TERM TSTP
 ```
 
-This Bash trap ensures the `cleanup_mounts` function runs automatically when the script exits, regardless of how it exits (normal termination, error, or Ctrl+C). This prevents orphaned mounts that could cause system issues.
+This Bash trap ensures the `master_cleanup` function runs automatically when the script exits, regardless of how it exits (normal termination, error, or Ctrl+C). This prevents orphaned mounts that could cause system issues.
+
+---
 
 ## 🔧 Advanced Usage
 
@@ -291,10 +345,10 @@ Once inside the chroot:
 apt update
 
 # Install specific tool categories
-apt install kali-tools-top10        # Top 10 security tools
-apt install kali-tools-web          # Web application testing
-apt install kali-tools-wireless     # Wireless network tools
-apt install kali-tools-forensics    # Digital forensics tools
+apt install kali-tools-top10       # Top 10 security tools
+apt install kali-tools-web         # Web application testing
+apt install kali-tools-wireless    # Wireless network tools
+apt install kali-tools-forensics   # Digital forensics tools
 
 # Or install the full Kali metapackage (requires significant disk space)
 apt install kali-linux-everything
@@ -302,9 +356,13 @@ apt install kali-linux-everything
 
 ### Manual Chroot Entry
 
-If you prefer to enter the chroot manually without the script:
+If you prefer to enter the chroot manually without the script (or use the `kali-login` alias from Option 3):
 
 ```bash
+# 1. Use the alias (after running Option 3 and sourcing)
+kali-login
+
+# 2. The manual way
 # Mount filesystems
 sudo mount --bind /dev /opt/kali-chroot/dev
 sudo mount --bind /dev/pts /opt/kali-chroot/dev/pts
@@ -327,7 +385,7 @@ To add additional locales inside the chroot:
 
 ```bash
 # Enter the chroot
-sudo chroot /opt/kali-chroot /bin/bash
+kali-login
 
 # Edit locale.gen
 nano /etc/locale.gen
@@ -340,13 +398,17 @@ locale-gen
 update-locale LANG=de_DE.UTF-8
 ```
 
+---
+
 ## ❓ Troubleshooting
 
 ### Common Issues
 
 #### "Error: Internet connectivity issue"
+
 **Problem**: Cannot reach Kali repositories  
-**Solution**: 
+**Solution**:
+
 ```bash
 # Test connectivity
 ping -c 3 archive.kali.org
@@ -359,17 +421,21 @@ ip link show
 ```
 
 #### "chroot: failed to run command '/bin/bash': No such file or directory"
+
 **Problem**: Incomplete installation or corrupted chroot  
-**Solution**: 
+**Solution**:
+
 ```bash
 # Remove and reinstall
-./kali-chroot-manager.sh  # Select option 3 (Uninstall)
+./kali-chroot-manager.sh  # Select option 4 (Uninstall)
 ./kali-chroot-manager.sh  # Select option 1 (Install)
 ```
 
 #### Package manager errors inside chroot
+
 **Problem**: Apt database locked or corrupted  
 **Solution**:
+
 ```bash
 # Inside chroot
 rm /var/lib/dpkg/lock-frontend
@@ -379,8 +445,10 @@ apt update
 ```
 
 #### Locale warnings when running commands
+
 **Problem**: Locale not properly configured  
 **Solution**:
+
 ```bash
 # Inside chroot
 export LANG=en_US.UTF-8
@@ -389,8 +457,10 @@ locale-gen en_US.UTF-8
 ```
 
 #### Cannot unmount filesystems
+
 **Problem**: Processes still using the chroot  
 **Solution**:
+
 ```bash
 # Find processes using the chroot
 lsof | grep /opt/kali-chroot
@@ -401,6 +471,8 @@ sudo fuser -k /opt/kali-chroot
 # Force unmount
 sudo umount -lf /opt/kali-chroot/{dev/pts,dev,proc,sys}
 ```
+
+---
 
 ## 🤝 Contributing
 
@@ -413,11 +485,14 @@ Contributions are welcome! Here's how you can help:
 5. **Open a Pull Request**
 
 ### Areas for Improvement
+
 - Support for ARM architectures
 - Multiple chroot profiles
 - Automatic backup before uninstall
 - Integration with systemd for auto-mounting
 - GUI version using dialog or whiptail
+
+---
 
 ## 🙏 Acknowledgments
 
@@ -425,9 +500,13 @@ Contributions are welcome! Here's how you can help:
 - Offensive Security for Kali Linux
 - The Linux community for chroot documentation
 
+---
+
 ## 📞 Support
 
 - 🐛 **Report bugs**: [GitHub Issues](https://github.com/Nixon-H/kali-chroot-manager/issues)
+
+---
 
 ## ⚖️ Disclaimer
 
